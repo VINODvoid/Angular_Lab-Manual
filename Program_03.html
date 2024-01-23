@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <title>Program-03</title>
+</head>
+<body>
+<div ng-app="myApp" ng-controller="myCtrl">
+
+First Number: <input type="number" ng-model="firstNumber"><br>
+Second Number: <input type="number" ng-model="secondNumber"><br>
+<button ng-click="add()">Add</button>
+<button ng-click="subtract()">Subtract</button>
+<button ng-click="multiply()">Multiply</button>
+<button ng-click="divide()">Divide</button>
+<br>
+Result: {{result}}
+
+</div>
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope) {
+    $scope.firstNumber = 0;
+    $scope.secondNumber = 0;
+    $scope.result = 0;
+
+    $scope.add = function() {
+        $scope.result = $scope.firstNumber + $scope.secondNumber;
+    }
+
+    $scope.subtract = function() {
+        $scope.result = $scope.firstNumber - $scope.secondNumber;
+    }
+
+    $scope.multiply = function() {
+        $scope.result = $scope.firstNumber * $scope.secondNumber;
+    }
+
+    $scope.divide = function() {
+        if($scope.secondNumber != 0){
+            $scope.result = $scope.firstNumber / $scope.secondNumber;
+        } else {
+            $scope.result = "Cannot divide by zero";
+        }
+    }
+});
+</script>
+</body>
+</html>

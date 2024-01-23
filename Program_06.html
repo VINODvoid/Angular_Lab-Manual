@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <title>Program-06</title>
+</head>
+
+<body>
+
+    <div ng-app="myApp" ng-controller="myCtrl">
+
+        <h2>To-Do List</h2>
+
+        <form ng-submit="addTask()">
+            <input type="text" ng-model="newTask" placeholder="Add new task" required>
+            <input type="submit" value="Add">
+        </form>
+
+        <ul>
+            <li ng-repeat="task in tasks">
+                <input type="text" ng-model="task.title" ng-blur="updateTask(task)">
+                <button ng-click="deleteTask(task)">Delete</button>
+            </li>
+        </ul>
+
+    </div>
+
+    <script>
+        var app = angular.module('myApp', []);
+        app.controller('myCtrl', function ($scope) {
+            $scope.tasks = [
+                { title: 'Bow Before God' },
+                { title: 'Praise the God' },
+                { title: 'Life to the God' }
+            ];
+
+            $scope.addTask = function () {
+                $scope.tasks.push({ title: $scope.newTask });
+                $scope.newTask = '';
+            };
+
+            $scope.updateTask = function (task) {
+                var index = $scope.tasks.indexOf(task);
+                $scope.tasks[index] = task;
+            };
+
+            $scope.deleteTask = function (task) {
+                var index = $scope.tasks.indexOf(task);
+                $scope.tasks.splice(index, 1);
+            };
+        });
+    </script>
+</body>
+
+</html>

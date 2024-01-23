@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="studentApp">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Program-05</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+	</head>
+	<body>
+		<div ng-controller="StudentController">
+			<h2>Student Details</h2>
+			<label for="studentName">Student Name:</label>
+			<input
+				type="text"
+				ng-model="newStudent.name"
+				id="studentName"
+				placeholder="Enter student name"
+			/>
+			<br />
+			<label for="cgpa">CGPA:</label>
+			<input
+				type="number"
+				ng-model="newStudent.cgpa"
+				id="cgpa"
+				placeholder="Enter CGPA"
+			/>
+			<br />
+			<button ng-click="addStudent()">Add Student</button>
+			<br />
+			<h3>Student List</h3>
+			<ul>
+				<li ng-repeat="student in studentList">
+					{{ student.name }} - CGPA: {{ student.cgpa }}
+				</li>
+			</ul>
+			<p>Total Number of Students: {{ studentList.length }}</p>
+		</div>
+		<script>
+			var app = angular.module("studentApp", []);
+			app.controller("StudentController", function ($scope) {
+				$scope.newStudent = {};
+				$scope.studentList = [];
+				$scope.addStudent = function () {
+					if ($scope.newStudent.name && $scope.newStudent.cgpa) {
+
+						$scope.studentList.push({
+							name: $scope.newStudent.name,
+							cgpa: $scope.newStudent.cgpa,
+						});
+						$scope.newStudent = {};
+					} else {
+						alert("Please enter both student name and CGPA.");
+					}
+				};
+			});
+		</script>
+	</body>
+</html>

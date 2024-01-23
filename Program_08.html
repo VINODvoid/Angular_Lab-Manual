@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <title>Program-08</title>
+</head>
+
+<body>
+    <div ng-app="myApp" ng-controller="formCtrl">
+
+        <form name="myForm" ng-submit="submitForm()" novalidate>
+
+            <label for="uname">Username:</label><br>
+            <input type="text" id="uname" name="uname" ng-model="uname" required>
+            <span style="color:red" ng-show="myForm.uname.$dirty && myForm.uname.$invalid">
+                <span ng-show="myForm.uname.$error.required">Username is required.</span>
+            </span>
+            <br>
+
+            <label for="pwd">Password:</label><br>
+            <input type="password" id="pwd" name="pwd" ng-model="pwd" required>
+            <span style="color:red" ng-show="myForm.pwd.$dirty && myForm.pwd.$invalid">
+                <span ng-show="myForm.pwd.$error.required">Password is required.</span>
+            </span>
+            <br>
+
+            <input type="submit" ng-disabled="myForm.$invalid" value="Submit">
+
+        </form>
+
+    </div>
+
+    <script>
+        var app = angular.module('myApp', []);
+        app.controller('formCtrl', function ($scope) {
+            $scope.submitForm = function () {
+                if ($scope.myForm.$valid) {
+                    alert('Form is valid');
+                }
+            };
+        });
+    </script>
+</body>
+
+</html>

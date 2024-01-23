@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<title>Program-04</title>
+<body>
+<div ng-app="myApp" ng-controller="myCtrl" ng-init="number=5">
+<p>Enter a number:</p>
+<input type="number" ng-model="number">
+<p>Factorial: {{factorial(number)}}</p>
+<p>Square: {{square(number)}}</p>
+</div>
+<script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope) {
+    $scope.factorial = function(n) {
+        if (n === 0) {
+            return 1;
+        } else {
+            return n * $scope.factorial(n - 1);
+        }
+    }
+
+    $scope.square = function(n) {
+        return n * n;
+    }
+});
+</script>
+
+</body>
+</html>
