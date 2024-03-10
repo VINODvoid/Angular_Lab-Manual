@@ -1,43 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="itemApp">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-    <title>Program-10</title>
+    <title>Program - 10</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
 </head>
-<body>
-    <div ng-app="myApp" ng-controller="myCtrl">
 
+<body>
+    <div ng-controller="ItemController">
         <h2>Item Collection</h2>
-        
-        <p>Total Items: {{items.length}}</p>
-        
-        <p>Enter new item: <input ng-model="newItem"></p>
-        <button ng-click="addItem()">Add</button>
-        
+        <label for="newItem">New Item:</label>
+        <input type="text" ng-model="newItem" id="newItem" placeholder="Enter item name">
+        <button ng-click="addItem()">Add Item</button>
+        <br>
         <ul>
-            <li ng-repeat="item in items">
-            {{item}} <button ng-click="removeItem($index)">Remove</button>
+            <li ng-repeat="item in itemList">
+                {{ item }}
+                <button ng-click="removeItem($index)">Remove</button>
             </li>
         </ul>
-        
-        </div>
-        
-        <script>
-        var app = angular.module('myApp', []);
-        app.controller('myCtrl', function($scope) {
-            $scope.items = ["Item 1", "Item 2", "Item 3"];
-            
+        <p>Total Number of Items: {{ itemList.length }}</p>
+    </div>
+    <script>
+        var app = angular.module('itemApp', []);
+        app.controller('ItemController', function ($scope) {
+            // Default items
+            $scope.itemList = ['Item 1', 'Item 2', 'Item 3'];
+            // Function to add a new item
             $scope.addItem = function () {
-                $scope.items.push($scope.newItem);
-                $scope.newItem = "";
+                if ($scope.newItem) {
+                    $scope.itemList.push($scope.newItem);
+                    $scope.newItem = ''; // Clear input field after adding item
+                } else {
+                    alert('Please enter an item.');
+                }
             };
-            
+            // Function to remove an item
             $scope.removeItem = function (index) {
-                $scope.items.splice(index, 1);
+                var confirmRemove = confirm('Are you sure you want to remove this item?');
+                if (confirmRemove) {
+                    $scope.itemList.splice(index, 1);
+                }
             };
         });
-        </script>
+    </script>
 </body>
+
 </html>

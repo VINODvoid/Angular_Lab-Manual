@@ -1,48 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="loginApp">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-    <title>Program-08</title>
+    <title>Program -08</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        .error-message {
+            color: red;
+        }
+        .success-message {
+            color: green;
+        }
+    </style>
 </head>
 
 <body>
-    <div ng-app="myApp" ng-controller="formCtrl">
 
-        <form name="myForm" ng-submit="submitForm()" novalidate>
-
-            <label for="uname">Username:</label><br>
-            <input type="text" id="uname" name="uname" ng-model="uname" required>
-            <span style="color:red" ng-show="myForm.uname.$dirty && myForm.uname.$invalid">
-                <span ng-show="myForm.uname.$error.required">Username is required.</span>
-            </span>
-            <br>
-
-            <label for="pwd">Password:</label><br>
-            <input type="password" id="pwd" name="pwd" ng-model="pwd" required>
-            <span style="color:red" ng-show="myForm.pwd.$dirty && myForm.pwd.$invalid">
-                <span ng-show="myForm.pwd.$error.required">Password is required.</span>
-            </span>
-            <br>
-
-            <input type="submit" ng-disabled="myForm.$invalid" value="Submit">
-
+    <div ng-controller="LoginController">
+        <h2>Login</h2>
+        <form name="loginForm" ng-submit="login()">
+            <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" ng-model="user.username" required>
+            <span class="error-message" ng-show="loginForm.username.$error.required">Username is required.</span>
+            </div>
+            <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" ng-model="user.password" required>
+            <span class="error-message" ng-show="loginForm.password.$error.required">Password is required.</span>
+            </div>
+            <button type="submit">Login</button>
         </form>
+        <p class="success-message" ng-show="loggedIn">Successfully logged in!</p>
 
-    </div>
+
+        </div>
 
     <script>
-        var app = angular.module('myApp', []);
-        app.controller('formCtrl', function ($scope) {
-            $scope.submitForm = function () {
-                if ($scope.myForm.$valid) {
-                    alert('Form is valid');
-                }
-            };
-        });
+        angular.module('loginApp', [])
+            .controller('LoginController', function ($scope) {
+                $scope.user = {};
+                $scope.loggedIn = false;
+                $scope.login = function () {
+                    if ($scope.loginForm.$valid) {
+                        $scope.loggedIn = true;
+                        // Perform login logic here
+                        console.log('Username:', $scope.user.username);
+                        console.log('Password:', $scope.user.password);
+                    } else {
+                        // Form validation failed
+                        console.log('Form validation failed.');
+                    }
+                };
+            });
     </script>
+
 </body>
 
 </html>

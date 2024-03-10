@@ -1,35 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="employeeApp">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script><div ng-app="myApp" ng-controller="myCtrl">
-
-    <title>Program-09</title>
+  <meta charset="UTF-8">
+  <title>Program -09</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 </head>
 <body>
-    <div ng-app="myApp" ng-controller="myCtrl">
-        <p>Input a name or salary to search the employee list:</p>
-<p><input type="text" ng-model="searchText"></p>
-<table>
-    <tr ng-repeat="x in employees | filter:searchText">
-      <td>{{x.name}}</td>
-      <td>{{x.salary}}</td>
-    </tr>
+
+<div ng-controller="EmployeeController">
+  <h2>Employee Directory</h2>
+  
+
+  <form ng-submit="addEmployee()">
+    <input type="text" ng-model="newEmployee.name" placeholder="Name">
+    <input type="text" ng-model="newEmployee.salary" placeholder="Salary">
+    <button type="submit">Add Employee</button>
+  </form>
+  
+
+  <input type="text" ng-model="searchName" placeholder="Search by Name">
+  
+
+  <input type="text" ng-model="searchSalary" placeholder="Search by Salary">
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Salary</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="employee in employees | filter: {name: searchName, salary: searchSalary}">
+        <td>{{ employee.name }}</td>
+        <td>{{ employee.salary }}</td>
+        <td>
+          <button ng-click="editEmployee(employee)">Edit</button>
+          <button ng-click="deleteEmployee(employee)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
   </table>
   
+
+  <div ng-show="showEditForm">
+    <h3>Edit Employee</h3>
+    <form ng-submit="updateEmployee()">
+      <input type="text" ng-model="selectedEmployee.name" placeholder="Name">
+      <input type="text" ng-model="selectedEmployee.salary" placeholder="Salary">
+      <button type="submit">Update</button>
+    </form>
+  </div>
+</div>
+
 <script>
-var app = angular.module('myApp', []);
-app.controller('myCtrl', function($scope) {
-  $scope.employees = [
-    {name: 'John', salary: 10000},
-    {name: 'Jane', salary: 12000},
-    {name: 'Doe', salary: 14000},
-    {name: 'Smith', salary: 16000}
-  ];
-});
+  angular.module('employeeApp', [])
+    .controller('EmployeeController', function($scope) {
+      $scope.employees = [
+        { id: 1, name: 'John Doe', salary: 50000 },
+        { id: 2, name: 'Jane Smith', salary: 60000 },
+        { id: 3, name: 'Alice Johnson', salary: 55000 },
+        { id: 4, name: 'Bob Brown', salary: 52000 },
+        { id: 5, name: 'Charlie Lee', salary: 58000 },
+      ];
+      
+      $scope.newEmployee = {};
+      $scope.showEditForm = false;
+      $scope.selectedEmployee = {};
+      
+      $scope.addEmployee = function() {
+        $scope.employees.push({
+          id: $scope.employees.length + 1,
+          name: $scope.newEmployee.name,
+          salary: $scope.newEmployee.salary
+        });
+        $scope.newEmployee = {};
+      };
+      
+      $scope.editEmployee = function(employee) {
+        $scope.showEditForm = true;
+        $scope.selectedEmployee = angular.copy(employee);
+      };
+      
+      $scope.updateEmployee = function() {
+        var index = $scope.employees.findIndex(function(emp) {
+          return emp.id === $scope.selectedEmployee.id;
+        });
+        if (index !== -1) {
+          $scope.employees[index] = angular.copy($scope.selectedEmployee);
+          $scope.showEditForm = false;
+          $scope.selectedEmployee = {};
+        }
+      };
+      
+      $scope.deleteEmployee = function(employee) {
+        var index = $scope.employees.findIndex(function(emp) {
+          return emp.id === employee.id;
+        });
+        if (index !== -1) {
+          $scope.employees.splice(index, 1);
+        }
+      };
+    });
 </script>
 
-</div>
 </body>
+</html>
+
 </html>

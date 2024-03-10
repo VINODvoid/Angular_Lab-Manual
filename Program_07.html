@@ -1,87 +1,77 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="userApp">
+<html lang="en" ng-app="crudApp">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
-    <title>Program-07</title>
+    <title>Program -07</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 </head>
 
 <body>
+
     <div ng-controller="UserController">
-        <h2>User Management</h2>
-        <form ng-submit="addUser()">
-            <label for="userName">User Name:</label>
-            <input type="text" ng-model="newUser.name" id="userName" required>
-            <label for="userEmail">User Email:</label>
-            <input type="email" ng-model="newUser.email" id="userEmail" required>
-            <button type="submit">Add User</button>
-        </form>
+        <h2>Users</h2>
+
         <ul>
-            <li ng-repeat="user in userList">
-                {{ user.name }} - {{ user.email }}
+            <li ng-repeat="user in users">
+                User :{{ user.name }} <br>Email : {{ user.email }}
                 <button ng-click="editUser(user)">Edit</button>
                 <button ng-click="deleteUser(user)">Delete</button>
             </li>
         </ul>
-        <div ng-show="isEditing">
-            <h3>Edit User</h3>
-            <form ng-submit="updateUser()">
-                <label for="editUserName">User Name:</label>
-                <input type="text" ng-model="editedUser.name" id="editUserName" required>
-                <label for="editUserEmail">User Email:</label>
-                <input type="email" ng-model="editedUser.email" id="editUserEmail" required>
-                <button type="submit">Update User</button>
-                <button ng-click="cancelEdit()">Cancel</button>
-            </form>
-        </div>
+
+        <form ng-submit="saveUser()">
+            <label for="name">Name:</label>
+            <input type="text" id="name" ng-model="currentUser.name" required>
+            <br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" ng-model="currentUser.email" required>
+            <br>
+            <button type="submit">{{ editing ? 'Update' : 'Create' }}</button>
+        </form>
     </div>
+
     <script>
-        var app = angular.module('userApp', []);
-        app.controller('UserController', function ($scope) {
-            $scope.newUser = {};
-            $scope.editedUser = {};
-            $scope.userList = [];
-            $scope.isEditing = false;
-            $scope.addUser = function () {
-                if ($scope.newUser.name && $scope.newUser.email) {
-                    $scope.userList.push({
-                        name: $scope.newUser.name,
-                        email: $scope.newUser.email
-                    });
-                    $scope.newUser = {};
-                }
-            };
-            $scope.editUser = function (user) {
-                $scope.editedUser = angular.copy(user);
-                $scope.isEditing = true;
-            };
-            $scope.updateUser = function () {
-                if ($scope.editedUser.name && $scope.editedUser.email) {
-                    var index = $scope.userList.findIndex(user => user === $scope.editedUser);
-                    if (index !== -1) {
-                        $scope.userList[index] = {
-                            name: $scope.editedUser.name,
-                            email: $scope.editedUser.email
-                        };
-                        $scope.editedUser = {};
-                        $scope.isEditing = false;
+        angular.module('crudApp', [])
+            .controller('UserController', function ($scope) {
+                $scope.users = [
+                    { id: 1, name: 'John Doe', email: 'john@example.com' },
+                    { id: 2, name: 'Jane Smith', email: 'jane@example.com' }
+                ];
+
+                $scope.currentUser = {};
+                $scope.editing = false;
+
+                $scope.saveUser = function () {
+                    if ($scope.editing) {
+                        // Update existing user
+                        var index = $scope.users.findIndex(user => user.id === $scope.currentUser.id);
+                        $scope.users[index] = angular.copy($scope.currentUser);
+                    } else {
+                        // Create new user
+                        $scope.currentUser.id = $scope.users.length + 1;
+                        $scope.users.push(angular.copy($scope.currentUser));
                     }
-                }
-            };
-            $scope.cancelEdit = function () {
-                $scope.editedUser = {};
-                $scope.isEditing = false;
-            };
-            $scope.deleteUser = function (user) {
-                var index = $scope.userList.findIndex(u => u === user);
-                if (index !== -1) {
-                    $scope.userList.splice(index, 1);
-                }
-            };
-        });
+
+                    // Clear form
+                    $scope.currentUser = {};
+                    $scope.editing = false;
+                };
+
+                $scope.editUser = function (user) {
+                    // Populate form with user data for editing
+                    $scope.currentUser = angular.copy(user);
+                    $scope.editing = true;
+                };
+
+                $scope.deleteUser = function (user) {
+                    // Delete user from the list
+                    var index = $scope.users.indexOf(user);
+                    $scope.users.splice(index, 1);
+                };
+            });
     </script>
+
 </body>
 
 </html>
